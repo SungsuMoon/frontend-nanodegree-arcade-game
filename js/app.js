@@ -1,3 +1,4 @@
+'use strict';
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
@@ -25,9 +26,41 @@ Enemy.prototype.update = function(dt) {
     }
 
     // Check for collision with enemies or barrier-walls
-    checkCollision(this);
+    this.checkCollision(player);
 };
 
+Enemy.prototype.checkCollision = function(player) {
+    // check for collision between enemy and player
+    if (
+        player.y + 131 >= this.y + 90
+        && player.x + 25 <= this.x + 88
+        && player.y + 73 <= this.y + 135
+        && player.x + 76 >= this.x + 11) {
+        player.x = 202.5;
+        player.y = 383;
+    }
+
+    // check for player reaching top of canvas and winning the game
+    if (player.y + 63 <= 0) {
+        player.x = 202.5;
+        player.y = 383;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, 505, 171);
+
+    }
+
+    // check if player runs into left, bottom, or right canvas walls
+    // prevent player from moving beyond canvas wall boundaries
+    if (player.y > 383 ) {
+        player.y = 383;
+    }
+    if (player.x > 402.5) {
+        player.x = 402.5;
+    }
+    if (player.x < 2.5) {
+        player.x = 2.5;
+    }
+};
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -48,7 +81,6 @@ Player.prototype.update = function() {
 };
 
 // Draw the player on the screen, required method for game
-// Display score
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
@@ -56,65 +88,16 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(keyPress) {
     if (keyPress == 'left') {
-        player.x -= player.speed;
+        this.x -= this.speed;
     }
     if (keyPress == 'up') {
-        player.y -= player.speed - 20;
+        this.y -= this.speed - 20;
     }
     if (keyPress == 'right') {
-        player.x += player.speed;
+        this.x += this.speed;
     }
     if (keyPress == 'down') {
-        player.y += player.speed - 20;
-    }
-};
-
-var checkCollision = function(anEnemy) {
-    // check for collision between enemy and player
-    if (
-        player.y + 131 >= anEnemy.y + 90
-        && player.x + 25 <= anEnemy.x + 88
-        && player.y + 73 <= anEnemy.y + 135
-        && player.x + 76 >= anEnemy.x + 11) {
-        player.x = 202.5;
-        player.y = 383;
-    }
-
-    // check for player reaching top of canvas and winning the game
-    // if player wins, add 1 to the score and level
-    // pass score as an argument to the increaseDifficulty function
-    if (player.y + 63 <= 0) {
-        player.x = 202.5;
-        player.y = 383;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 505, 171);
-        increaseDifficulty(score);
-
-    }
-
-    // check if player runs into left, bottom, or right canvas walls
-    // prevent player from moving beyond canvas wall boundaries
-    if (player.y > 383 ) {
-        player.y = 383;
-    }
-    if (player.x > 402.5) {
-        player.x = 402.5;
-    }
-    if (player.x < 2.5) {
-        player.x = 2.5;
-    }
-};
-
-// Increase number of enemies on screen based on player's score
-var increaseDifficulty = function(numEnemies) {
-    // remove all previous enemies on canvas
-    allEnemies.length = 0;
-
-    // load new set of enemies
-    for (var i = 0; i <= numEnemies; i++) {
-        var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
-
-        allEnemies.push(enemy);
+        this.y += this.speed - 20;
     }
 };
 
@@ -122,10 +105,8 @@ var increaseDifficulty = function(numEnemies) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 // Enemy randomly placed vertically within section of canvas
-// Declare new score and gameLevel variables to store score and level
 var allEnemies = [];
 var player = new Player(202.5, 383, 50);
-var score = 0;
 var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
 
 allEnemies.push(enemy);
