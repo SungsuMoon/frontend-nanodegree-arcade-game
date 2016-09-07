@@ -32,10 +32,10 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.checkCollision = function(player) {
     // check for collision between enemy and player
     if (
-        player.y + 131 >= this.y + 90
-        && player.x + 25 <= this.x + 88
-        && player.y + 73 <= this.y + 135
-        && player.x + 76 >= this.x + 11) {
+        player.y + 131 >= this.y + 90 &&
+        player.x + 25 <= this.x + 88 &&
+        player.y + 73 <= this.y + 135 &&
+        player.x + 76 >= this.x + 11) {
         player.x = 202.5;
         player.y = 383;
     }
@@ -107,9 +107,12 @@ Player.prototype.handleInput = function(keyPress) {
 // Enemy randomly placed vertically within section of canvas
 var allEnemies = [];
 var player = new Player(202.5, 383, 50);
-var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
-
-allEnemies.push(enemy);
+var enemy0 = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
+var enemy1 = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
+var enemy2 = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
+allEnemies.push(enemy0);
+allEnemies.push(enemy1);
+allEnemies.push(enemy2);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
